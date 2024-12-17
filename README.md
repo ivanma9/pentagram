@@ -5,8 +5,8 @@
 First, clone the GitHub repository:
 
 ```bash
-[git clone https://github.com/team-headstart/pentagram.git](https://github.com/ivanma9/pentagram.git
-](https://github.com/ivanma9/pentagram.git)```
+https://github.com/ivanma9/pentagram.git
+```
 
 Then, navigate to the project directory:
 
