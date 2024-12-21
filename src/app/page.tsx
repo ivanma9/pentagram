@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 export default function Home() {
   const [inputText, setInputText] = useState("");
@@ -22,15 +21,19 @@ export default function Home() {
       });
 
       const data = await response.json();
+      console.log("data success ", data.success);
+      console.log("data imageUrl ", data.imageUrl);
 
-      if (!data.imageUrl) {
+      if (!data.success) {
         throw new Error(data.error || "Failed to generate image");
       }
       if (data.imageUrl) {
         const img = new Image();
         img.onload = () => {
+          console.log("img_url", data.imageUrl);
           setImageUrl(data.imageUrl);
         };
+        console.log("imageUrl", imageUrl);
         img.src = data.imageUrl;
       }
       setInputText("");
@@ -42,20 +45,14 @@ export default function Home() {
   };
 
   return (
-    // TODO: Update the UI here to show the images generated
-
     <div className="min-h-screen flex flex-col justify-between p-8">
-      <main className="flex-1">
-        {/* Main content can go here */}
-
+      <main className="flex-1 flex flex-col items-center gap-8">
         {imageUrl && (
           <div className="w-full max-w-2xl rounded-lg overflow-hidden shadow-lg">
-            <Image
+            <img
               src={imageUrl}
-              alt="Generated Image"
+              alt="Generated artwork"
               className="w-full h-auto"
-              width={512}
-              height={512}
             />
           </div>
         )}
