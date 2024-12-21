@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Home() {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +22,17 @@ export default function Home() {
       });
 
       const data = await response.json();
-      console.log(data);
+
+      if (!data.imageUrl) {
+        throw new Error(data.error || "Failed to generate image");
+      }
+      if (data.imageUrl) {
+        const img = new Image();
+        img.onload = () => {
+          setImageUrl(data.imageUrl);
+        };
+        img.src = data.imageUrl;
+      }
       setInputText("");
     } catch (error) {
       console.error("Error:", error);
@@ -31,9 +43,23 @@ export default function Home() {
 
   return (
     // TODO: Update the UI here to show the images generated
-    
+
     <div className="min-h-screen flex flex-col justify-between p-8">
-      <main className="flex-1">{/* Main content can go here */}</main>
+      <main className="flex-1">
+        {/* Main content can go here */}
+
+        {imageUrl && (
+          <div className="w-full max-w-2xl rounded-lg overflow-hidden shadow-lg">
+            <Image
+              src={imageUrl}
+              alt="Generated Image"
+              className="w-full h-auto"
+              width={512}
+              height={512}
+            />
+          </div>
+        )}
+      </main>
 
       <footer className="w-full max-w-3xl mx-auto">
         <form onSubmit={handleSubmit} className="w-full">
